@@ -7,6 +7,6 @@ interface NetworkDiscoveryRepository{
     suspend fun startBroadcasting(id : String)
     suspend fun stopBroadcasting()
 
-    fun startDiscovery() : Flow<List<NetworkDevice>>
+    fun startDiscovery(myDeviceName : String) : Flow<List<NetworkDevice>>
     suspend fun stopDiscovery()
 }

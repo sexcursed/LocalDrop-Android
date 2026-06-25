@@ -44,7 +44,7 @@ class NsdDiscoveryImpl(private val context : Context) : NetworkDiscoveryReposito
         nsdManager.unregisterService(registrationListener)
     }
 
-    override fun startDiscovery(): Flow<List<NetworkDevice>> {
+    override fun startDiscovery(myDeviceName : String): Flow<List<NetworkDevice>> {
         return callbackFlow {
             val discoveredDevices = mutableSetOf<NetworkDevice>()
             val discoveryListener = object : NsdManager.DiscoveryListener{
@@ -57,6 +57,7 @@ class NsdDiscoveryImpl(private val context : Context) : NetworkDiscoveryReposito
                 }
                 @Suppress("DEPRECATION")
                 override fun onServiceFound(serviceInfo: NsdServiceInfo) {
+                    if(myDeviceName == serviceInfo.serviceName) return
                     nsdManager.resolveService(serviceInfo, object : NsdManager.ResolveListener {
                         override fun onResolveFailed(serviceInfo: NsdServiceInfo?, errorCode: Int) {
                             Log.d("NSD_TAG", "Не удалось разрешить адрес: $errorCode")
